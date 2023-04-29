@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 
-	"github.com/roman-mazur/architecture-lab-3/painter"
-	"github.com/roman-mazur/architecture-lab-3/painter/lang"
-	"github.com/roman-mazur/architecture-lab-3/ui"
+	"github.com/AidXylelele/go_lab_3/painter"
+	"github.com/AidXylelele/go_lab_3/painter/lang"
+	"github.com/AidXylelele/go_lab_3/ui"
 )
 
 func main() {
