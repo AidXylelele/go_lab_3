@@ -1,10 +1,11 @@
 package painter
 
 import (
-	"golang.org/x/exp/shiny/screen"
-	"golang.org/x/image/draw"
 	"image"
 	"image/color"
+
+	"golang.org/x/exp/shiny/screen"
+	"golang.org/x/image/draw"
 )
 
 // Operation змінює вхідну текстуру.
@@ -70,14 +71,13 @@ func (op *Figure) Do(t screen.Texture) bool {
 
 type Move struct {
 	X, Y    int
-	Figures []Figure
+	Figures []*Figure
 }
 
 func (op *Move) Do(t screen.Texture) bool {
 	for i := range op.Figures {
 		op.Figures[i].X += op.X
 		op.Figures[i].Y += op.Y
-		op.Figures[i].Do(t)
 	}
 	return false
 }
