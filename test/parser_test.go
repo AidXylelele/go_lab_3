@@ -5,14 +5,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/AidXylelele/go_lab_3/painter"
-	"github.com/AidXylelele/go_lab_3/painter/lang"
+	"github.com/Dimdim28/lab3-software-architecture/painter"
+	"github.com/Dimdim28/lab3-software-architecture/painter/lang"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
-func TestParseStruct(t *testing.T) {
-	testCases := []struct {
+func testing_parse_struct(t *testing.T) {
+	tests := []struct {
 		name    string
 		command string
 		op      painter.Operation
@@ -46,10 +46,9 @@ func TestParseStruct(t *testing.T) {
 
 	parser := &lang.Parser{}
 
-	for _, tc := range testCases {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ops, err := parser.Parse(strings.NewReader(tc.command))
-
 			if tc.op == nil {
 				assert.Error(t, err)
 			} else {
@@ -62,8 +61,8 @@ func TestParseStruct(t *testing.T) {
 	}
 }
 
-func TestParseFunc(t *testing.T) {
-	testCases := []struct {
+func testing_parse_func(t *testing.T) {
+	tests := []struct {
 		name    string
 		command string
 		op      painter.Operation
@@ -87,10 +86,9 @@ func TestParseFunc(t *testing.T) {
 
 	parser := &lang.Parser{}
 
-	for _, tc := range testCases {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			ops, err := parser.Parse(strings.NewReader(tc.command))
-
 			require.NoError(t, err)
 			require.Len(t, ops, 1)
 			assert.IsType(t, tc.op, ops[0])
