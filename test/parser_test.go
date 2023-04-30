@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Dimdim28/lab3-software-architecture/painter"
-	"github.com/Dimdim28/lab3-software-architecture/painter/lang"
+	"github.com/AidXylelele/go_lab_3/painter"
+	"github.com/AidXylelele/go_lab_3/painter/lang"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
