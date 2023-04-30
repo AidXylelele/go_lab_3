@@ -12,7 +12,7 @@ import (
 )
 
 func TestParseStruct(t *testing.T) {
-	tests := []struct {
+	testCases := []struct {
 		name    string
 		command string
 		op      painter.Operation
@@ -46,9 +46,10 @@ func TestParseStruct(t *testing.T) {
 
 	parser := &lang.Parser{}
 
-	for _, tc := range tests {
+	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ops, err := parser.Parse(strings.NewReader(tc.command))
+
 			if tc.op == nil {
 				assert.Error(t, err)
 			} else {
@@ -62,7 +63,7 @@ func TestParseStruct(t *testing.T) {
 }
 
 func TestParseFunc(t *testing.T) {
-	tests := []struct {
+	testCases := []struct {
 		name    string
 		command string
 		op      painter.Operation
@@ -86,9 +87,10 @@ func TestParseFunc(t *testing.T) {
 
 	parser := &lang.Parser{}
 
-	for _, tc := range tests {
+	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ops, err := parser.Parse(strings.NewReader(tc.command))
+
 			require.NoError(t, err)
 			require.Len(t, ops, 1)
 			assert.IsType(t, tc.op, ops[0])
