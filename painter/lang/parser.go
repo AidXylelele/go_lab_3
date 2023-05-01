@@ -76,42 +76,58 @@ func (p *Parser) resetState() {
 	p.updateOp = nil
 }
 
-func (p *Parser) parse(commandLine string) error {
-	parts := strings.Split(commandLine, " ")
-	instruction := parts[0]
-	var args []string
-	if len(parts) > 1 {
-		args = parts[1:]
-	}
-	var iArgs []int
-	for _, arg := range args {
-		i, err := strconv.Atoi(arg)
-		if err == nil {
+func (p *Parser) parse(commandStr string) error {
+	commands := strings.Split(commandStr, ",")
+	for _, command := range commands {
+		parts := strings.Fields(command)
+		if len(parts) < 1 {
+			return fmt.Errorf("invalid command: %v", command)
+		}
+		instruction := parts[0]
+		var args []string
+		if len(parts) > 1 {
+			args = parts[1:]
+		}
+		var iArgs []int
+		for _, arg := range args {
+			i, err := strconv.Atoi(arg)
+			if err != nil {
+				return fmt.Errorf("invalid argument: %v", arg)
+			}
 			iArgs = append(iArgs, i)
 		}
-	}
 
-	switch instruction {
-	case "white":
-		p.lastBgColor = painter.OperationFunc(painter.WhiteFill)
-	case "green":
-		p.lastBgColor = painter.OperationFunc(painter.GreenFill)
-	case "bgrect":
-		p.lastBgRect = &painter.BgRectangle{X1: iArgs[0], Y1: iArgs[1], X2: iArgs[2], Y2: iArgs[3]}
-	case "figure":
-		clr := color.RGBA{R: 255, G: 255, B: 0, A: 1}
-		figure := painter.Figure{X: iArgs[0], Y: iArgs[1], C: clr}
-		p.figures = append(p.figures, &figure)
-	case "move":
-		moveOp := painter.Move{X: iArgs[0], Y: iArgs[1], Figures: p.figures}
-		p.moveOps = append(p.moveOps, &moveOp)
-	case "reset":
-		p.resetState()
-		p.lastBgColor = painter.OperationFunc(painter.ResetScreen)
-	case "update":
-		p.updateOp = painter.UpdateOperation
-	default:
-		return fmt.Errorf("could not parse command %v", commandLine)
+		switch instruction {
+		case "white":
+			p.lastBgColor = painter.OperationFunc(painter.WhiteFill)
+		case "green":
+			p.lastBgColor = painter.OperationFunc(painter.GreenFill)
+		case "bgrect":
+			if len(iArgs) != 4 {
+				return fmt.Errorf("invalid number of arguments for command bgrect: %v", len(iArgs))
+			}
+			p.lastBgRect = &painter.BgRectangle{X1: iArgs[0], Y1: iArgs[1], X2: iArgs[2], Y2: iArgs[3]}
+		case "figure":
+			if len(iArgs) != 2 {
+				return fmt.Errorf("invalid number of arguments for command figure: %v", len(iArgs))
+			}
+			clr := color.RGBA{R: 255, G: 255, B: 0, A: 1}
+			figure := painter.Figure{X: iArgs[0], Y: iArgs[1], C: clr}
+			p.figures = append(p.figures, &figure)
+		case "move":
+			if len(iArgs) != 2 {
+				return fmt.Errorf("invalid number of arguments for command move: %v", len(iArgs))
+			}
+			moveOp := painter.Move{X: iArgs[0], Y: iArgs[1], Figures: p.figures}
+			p.moveOps = append(p.moveOps, &moveOp)
+		case "reset":
+			p.resetState()
+			p.lastBgColor = painter.OperationFunc(painter.ResetScreen)
+		case "update":
+			p.updateOp = painter.UpdateOperation
+		default:
+			return fmt.Errorf("unknown command: %v", instruction)
+		}
 	}
 	return nil
 }

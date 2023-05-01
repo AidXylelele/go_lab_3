@@ -24,6 +24,7 @@ func HttpHandler(loop *painter.Loop, p *Parser) http.Handler {
 		}
 
 		loop.Post(painter.PainterOperationList(cmds))
+		log.Printf("Operations: %s", cmds)
 		rw.WriteHeader(http.StatusOK)
 	})
 }
