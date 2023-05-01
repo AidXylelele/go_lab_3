@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Painter Controller</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        padding: 20px;
+      }
+
+      .main-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 36px;
+        margin-bottom: 30px;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      button {
+        border: none;
+        border-radius: 5px;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 10px 30px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        position: relative;
+      }
+
+      button.green {
+        background-color: transparent;
+        border: 4px solid #28a745;
+        color: black;
+        width: 200px;
+      }
+
+      button.green:hover {
+        color: #28a745;
+        background-color: transparent;
+      }
+
+      button.yellow {
+        background-color: #ffc107;
+        color: #343a40;
+        width: 200px;
+        position: relative;
+      }
+
+      button.yellow:hover {
+        background-color: #e0a800;
+      }
+
+      /* Keyframes to animate diagonal move */
+      @keyframes diagonal-move {
+        0% {
+          transform: translate(-20%, -20%);
+        }
+        25% {
+          transform: translate(0%, 0%);
+        }
+        50% {
+          transform: translate(20%, 20%);
+        }
+        75% {
+          transform: translate(0%, 0%);
+        }
+        100% {
+          transform: translate(-20%, -20%);
+        }
+      }
+
+      button.yellow span {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        animation: diagonal-move 3s linear infinite;
+        white-space: nowrap;
+        font-size: 16px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <h1>Painter Controller</h1>
+      <div class="button-container">
+        <button class="green" id="green_frame">Green Frame</button>
+        <button class="yellow" id="diagonal_move">
+          <span>Diagonal Move</span>
+        </button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
