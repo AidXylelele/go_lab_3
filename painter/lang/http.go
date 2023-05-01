@@ -11,6 +11,7 @@ import (
 
 func HttpHandler(loop *painter.Loop, p *Parser) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		rw.Header().Set("Access-Control-Allow-Origin", "*")
 		var in io.Reader = r.Body
 		if r.Method == http.MethodGet {
 			in = strings.NewReader(r.URL.Query().Get("cmd"))

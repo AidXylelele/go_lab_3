@@ -1,14 +1,15 @@
 const greenFrameBtn = document.querySelector(".gf-script");
 const diagonalMoveBtn = document.querySelector(".dm-script");
-const screenSize = 800;
-const figureRadius = 300;
-const startPos = figureRadius;
-const finishPos = screenSize - figureRadius;
-const maxDist = finishPos - startPos;
-const step = 20;
-const interval = 10000;
-let pos = startPos;
-let dist = 0;
+const windowLength = 800;
+const halfFigure = 150;
+const startPos = halfFigure;
+const finishPos = windowLength - halfFigure;
+const maxDistance = finishPos - startPos;
+const step = 100;
+const second = 1000;
+const tenSeconds = 10000;
+let position = startPos;
+let distance = 0;
 
 const config = {
   greenBtn: {
@@ -17,7 +18,7 @@ const config = {
     update: null,
   },
   diagonal: {
-    figure: [500, 500],
+    figure: [startPos, startPos],
     update: null,
   },
   moveRight: {
@@ -44,10 +45,47 @@ class UrlService {
 }
 
 const moveFigure = async () => {
- 
   await sendHTTPRequest(UrlService.create(config.diagonal));
 
- 
+  let flag = true;
+
+  setTimeout(() => {
+    flag = false;
+  }, tenSeconds);
+
+  while (flag) {
+    while (position > startPos) {
+      if (distance - step < 0) {
+        config.moveRight.move = [-distance, -distance];
+        sendHTTPRequest(UrlService.create(config.moveRight));
+        position = startPos;
+        distance = 0;
+      } else {
+        config.moveRight.move = [-step, -step];
+        sendHTTPRequest(UrlService.create(config.moveRight));
+        position -= step;
+        distance -= step;
+      }
+      sendHTTPRequest(UrlService.create({ update: null }));
+      await new Promise((resolve) => setTimeout(resolve, second));
+    }
+
+    while (position < finishPos) {
+      if (distance + step > maxDistance) {
+        config.moveLeft.move = [maxDistance - distance, maxDistance - distance];
+        sendHTTPRequest(UrlService.create(config.moveLeft));
+        position = finishPos;
+        distance = maxDistance;
+      } else {
+        config.moveLeft.move = [step, step];
+        sendHTTPRequest(UrlService.create(config.moveLeft));
+        position += step;
+        distance += step;
+      }
+      sendHTTPRequest(UrlService.create({ update: null }));
+      await new Promise((resolve) => setTimeout(resolve, second));
+    }
+  }
 };
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -73,5 +111,5 @@ greenFrameBtn.addEventListener("click", () => {
 diagonalMoveBtn.addEventListener("click", async () => {
   const url = UrlService.create(config.diagonal);
   await sendHTTPRequest(url);
-  await moveFigure()
+  await moveFigure();
 });
