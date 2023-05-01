@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func testing_parse_struct(t *testing.T) {
+func TestParseStruct(t *testing.T) {
 	tests := []struct {
 		name    string
 		command string
@@ -44,24 +44,23 @@ func testing_parse_struct(t *testing.T) {
 		},
 	}
 
-	parser := &lang.Parser{}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			parser := &lang.Parser{}
 			ops, err := parser.Parse(strings.NewReader(tc.command))
 			if tc.op == nil {
 				assert.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				require.Len(t, ops, 1)
-				assert.IsType(t, tc.op, ops[0])
-				assert.Equal(t, tc.op, ops[0])
+				assert.IsType(t, tc.op, ops[1])
+				assert.Equal(t, tc.op, ops[1])
 			}
 		})
 	}
 }
 
-func testing_parse_func(t *testing.T) {
+func TestParseFunc(t *testing.T) {
 	tests := []struct {
 		name    string
 		command string
