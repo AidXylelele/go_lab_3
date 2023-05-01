@@ -63,8 +63,8 @@ type Figure struct {
 }
 
 func (operation *Figure) Do(texture screen.Texture) bool {
-	texture.Fill(image.Rect(operation.X-150, operation.Y-100, operation.X+150, operation.Y), operation.C, draw.Src)
-	texture.Fill(image.Rect(operation.X-50, operation.Y, operation.X+50, operation.Y+100), operation.C, draw.Src)
+	texture.Fill(image.Rect(operation.X-150, operation.Y+100, operation.X+150, operation.Y), operation.C, draw.Src)
+	texture.Fill(image.Rect(operation.X-50, operation.Y, operation.X+50, operation.Y-100), operation.C, draw.Src)
 	return false
 }
 
