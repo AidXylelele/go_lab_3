@@ -15,7 +15,7 @@ func testing_parse_struct(t *testing.T) {
 	tests := []struct {
 		name    string
 		command string
-		op      painter.Operation
+		op      painter.PainterOperation
 	}{
 		{
 			name:    "background rectangle",
@@ -35,7 +35,7 @@ func testing_parse_struct(t *testing.T) {
 		{
 			name:    "update",
 			command: "update",
-			op:      painter.UpdateOp,
+			op:      painter.UpdateOperation,
 		},
 		{
 			name:    "invalid command",
@@ -65,7 +65,7 @@ func testing_parse_func(t *testing.T) {
 	tests := []struct {
 		name    string
 		command string
-		op      painter.Operation
+		op      painter.PainterOperation
 	}{
 		{
 			name:    "white fill",

@@ -8,53 +8,52 @@ import (
 	"golang.org/x/image/draw"
 )
 
-// Operation змінює вхідну текстуру.
-type Operation interface {
-	// Do виконує зміну операції, повертаючи true, якщо текстура вважається готовою для відображення.
-	Do(t screen.Texture) (ready bool)
+type PainterOperation interface {
+	// Do performs the operation and returns true if the texture is ready for display.
+	Do(texture screen.Texture) (ready bool)
 }
 
-// OperationList групує список операції в одну.
-type OperationList []Operation
+// PainterOperationList groups a list of operations into one.
+type PainterOperationList []PainterOperation
 
-func (ol OperationList) Do(t screen.Texture) (ready bool) {
-	for _, o := range ol {
-		ready = o.Do(t) || ready
+func (operationList PainterOperationList) Do(texture screen.Texture) (ready bool) {
+	for _, operation := range operationList {
+		ready = operation.Do(texture) || ready
 	}
 	return
 }
 
-// UpdateOp операція, яка не змінює текстуру, але сигналізує, що текстуру потрібно розглядати як готову.
-var UpdateOp = updateOp{}
+// UpdateOperation is an operation that does not change the texture, but signals that it should be considered ready.
+var UpdateOperation = updateOperation{}
 
-type updateOp struct{}
+type updateOperation struct{}
 
-func (op updateOp) Do(t screen.Texture) bool { return true }
+func (op updateOperation) Do(texture screen.Texture) bool { return true }
 
-// OperationFunc використовується для перетворення функції оновлення текстури в Operation.
-type OperationFunc func(t screen.Texture)
+// OperationFunc is used to convert a texture update function to a PainterOperation.
+type OperationFunc func(texture screen.Texture)
 
-func (f OperationFunc) Do(t screen.Texture) bool {
-	f(t)
+func (f OperationFunc) Do(texture screen.Texture) bool {
+	f(texture)
 	return false
 }
 
-// WhiteFill зафарбовує тестуру у білий колір. Може бути викоистана як Operation через OperationFunc(WhiteFill).
-func WhiteFill(t screen.Texture) {
-	t.Fill(t.Bounds(), color.White, screen.Src)
+// WhiteFill fills the texture with white color. Can be used as a PainterOperation using OperationFunc(WhiteFill).
+func WhiteFill(texture screen.Texture) {
+	texture.Fill(texture.Bounds(), color.White, screen.Src)
 }
 
-// GreenFill зафарбовує тестуру у зелений колір. Може бути викоистана як Operation через OperationFunc(GreenFill).
-func GreenFill(t screen.Texture) {
-	t.Fill(t.Bounds(), color.RGBA{G: 0xff, A: 0xff}, screen.Src)
+// GreenFill fills the texture with green color. Can be used as a PainterOperation using OperationFunc(GreenFill).
+func GreenFill(texture screen.Texture) {
+	texture.Fill(texture.Bounds(), color.RGBA{G: 0xff, A: 0xff}, screen.Src)
 }
 
 type BgRectangle struct {
 	X1, Y1, X2, Y2 int
 }
 
-func (op *BgRectangle) Do(t screen.Texture) bool {
-	t.Fill(image.Rect(op.X1, op.Y1, op.X2, op.Y2), color.Black, screen.Src)
+func (operation *BgRectangle) Do(texture screen.Texture) bool {
+	texture.Fill(image.Rect(operation.X1, operation.Y1, operation.X2, operation.Y2), color.Black, screen.Src)
 	return false
 }
 
@@ -63,9 +62,9 @@ type Figure struct {
 	C    color.RGBA
 }
 
-func (op *Figure) Do(t screen.Texture) bool {
-	t.Fill(image.Rect(op.X-150, op.Y-100, op.X+150, op.Y), op.C, draw.Src)
-	t.Fill(image.Rect(op.X-50, op.Y, op.X+50, op.Y+100), op.C, draw.Src)
+func (operation *Figure) Do(texture screen.Texture) bool {
+	texture.Fill(image.Rect(operation.X-150, operation.Y-100, operation.X+150, operation.Y), operation.C, draw.Src)
+	texture.Fill(image.Rect(operation.X-50, operation.Y, operation.X+50, operation.Y+100), operation.C, draw.Src)
 	return false
 }
 
@@ -74,14 +73,14 @@ type Move struct {
 	Figures []*Figure
 }
 
-func (op *Move) Do(t screen.Texture) bool {
-	for i := range op.Figures {
-		op.Figures[i].X += op.X
-		op.Figures[i].Y += op.Y
+func (operation *Move) Do(texture screen.Texture) bool {
+	for i := range operation.Figures {
+		operation.Figures[i].X += operation.X
+		operation.Figures[i].Y += operation.Y
 	}
 	return false
 }
 
-func ResetScreen(t screen.Texture) {
-	t.Fill(t.Bounds(), color.Black, draw.Src)
+func ResetScreen(texture screen.Texture) {
+	texture.Fill(texture.Bounds(), color.Black, draw.Src)
 }

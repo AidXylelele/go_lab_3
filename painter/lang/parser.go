@@ -12,11 +12,11 @@ import (
 )
 
 type Parser struct {
-	lastBgColor painter.Operation
+	lastBgColor painter.PainterOperation
 	lastBgRect  *painter.BgRectangle
 	figures     []*painter.Figure
-	moveOps     []painter.Operation
-	updateOp    painter.Operation
+	moveOps     []painter.PainterOperation
+	updateOp    painter.PainterOperation
 }
 
 func (p *Parser) initialize() {
@@ -28,7 +28,7 @@ func (p *Parser) initialize() {
 	}
 }
 
-func (p *Parser) Parse(in io.Reader) ([]painter.Operation, error) {
+func (p *Parser) Parse(in io.Reader) ([]painter.PainterOperation, error) {
 	p.initialize()
 	scanner := bufio.NewScanner(in)
 	scanner.Split(bufio.ScanLines)
@@ -44,8 +44,8 @@ func (p *Parser) Parse(in io.Reader) ([]painter.Operation, error) {
 	return p.finalResult(), nil
 }
 
-func (p *Parser) finalResult() []painter.Operation {
-	var res []painter.Operation
+func (p *Parser) finalResult() []painter.PainterOperation {
+	var res []painter.PainterOperation
 	if p.lastBgColor != nil {
 		res = append(res, p.lastBgColor)
 	}
@@ -109,7 +109,7 @@ func (p *Parser) parse(commandLine string) error {
 		p.resetState()
 		p.lastBgColor = painter.OperationFunc(painter.ResetScreen)
 	case "update":
-		p.updateOp = painter.UpdateOp
+		p.updateOp = painter.UpdateOperation
 	default:
 		return fmt.Errorf("could not parse command %v", commandLine)
 	}
