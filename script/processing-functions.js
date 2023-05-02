@@ -29,47 +29,48 @@ const moveLeft = {
 };
 
 const moveFigure = async () => {
-  await sendHTTPRequest(UrlService.create(diagonal));
-
-  let flag = true;
-
-  setTimeout(() => {
-    flag = false;
-  }, tenSeconds);
-
-  while (flag) {
-    while (position > startPos) {
-      if (distance - step < 0) {
-        moveRight.move = [-distance, -distance];
-        sendHTTPRequest(UrlService.create(moveRight));
-        position = startPos;
-        distance = 0;
-      } else {
-        moveRight.move = [-step, -step];
-        sendHTTPRequest(UrlService.create(moveRight));
-        position -= step;
-        distance -= step;
+    await sendHTTPRequest(UrlService.create(diagonal));
+  
+    let flag = true;
+  
+    setTimeout(() => {
+      flag = false;
+    }, tenSeconds);
+  
+    for (let i = 0; flag && i < 1000; i++) {
+      while (position > startPos) {
+        if (distance - step < 0) {
+          moveRight.move = [-distance, -distance];
+          await sendHTTPRequest(UrlService.create(moveRight));
+          position = startPos;
+          distance = 0;
+        } else {
+          moveRight.move = [-step, -step];
+          await sendHTTPRequest(UrlService.create(moveRight));
+          position -= step;
+          distance -= step;
+        }
+        await sendHTTPRequest(UrlService.create({ update: null }));
+        await new Promise((resolve) => setTimeout(resolve, second));
       }
-      sendHTTPRequest(UrlService.create({ update: null }));
-      await new Promise((resolve) => setTimeout(resolve, second));
-    }
-
-    while (position < finishPos) {
-      if (distance + step > maxDistance) {
-        moveLeft.move = [maxDistance - distance, maxDistance - distance];
-        sendHTTPRequest(UrlService.create(moveLeft));
-        position = finishPos;
-        distance = maxDistance;
-      } else {
-        moveLeft.move = [step, step];
-        sendHTTPRequest(UrlService.create(moveLeft));
-        position += step;
-        distance += step;
+  
+      while (position < finishPos) {
+        if (distance + step > maxDistance) {
+          moveLeft.move = [maxDistance - distance, maxDistance - distance];
+          await sendHTTPRequest(UrlService.create(moveLeft));
+          position = finishPos;
+          distance = maxDistance;
+        } else {
+          moveLeft.move = [step, step];
+          await sendHTTPRequest(UrlService.create(moveLeft));
+          position += step;
+          distance += step;
+        }
+        await sendHTTPRequest(UrlService.create({ update: null }));
+        await new Promise((resolve) => setTimeout(resolve, second));
       }
-      sendHTTPRequest(UrlService.create({ update: null }));
-      await new Promise((resolve) => setTimeout(resolve, second));
     }
-  }
-};
+  };
+  
 
 export { moveFigure, greenBtn, diagonal, moveLeft, moveRight };
