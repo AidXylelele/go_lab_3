@@ -1,163 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web client for Go painter</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-        html, body {
-            height: 100%;
-        }
-
-       /* Define the wrapper element */
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f2f2f2;
-}
-
-/* Style the form container */
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  margin: 20px;
-}
-
-/* Style the heading */
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* Style the form group */
-.form-group {
-  margin-bottom: 20px;
-}
-
-/* Style the label */
-label {
-  font-weight: bold;
-}
-
-/* Style the textarea */
-.form-group {
-  width: 100%;
-  resize: none;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-
-/* Style the button */
-.btn {
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.btn-outline-primary {
-  background-color: #fff;
-  border: 2px solid #007bff;
-  color: #007bff;
-}
-
-.btn-outline-primary:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.btn-block {
-  width: 100%;
-}
-
-/* Style the separator */
-h2 {
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-h2 span {
-  background-color: #fff;
-  padding: 0px 10px;
-}
-
-/* Style the button group */
-.d-flex {
-  display: flex;
-}
-
-.justify-content-around {
-  justify-content: space-around;
-}
-
-.gf-script,
-.dm-script {
-  width: 45%;
-}
-
-.gf-script {
-  background-color: #28a745;
-  border-color: #28a745;
-  color: #fff;
-}
-
-.dm-script {
-  background-color: #ffc107;
-  border-color: #ffc107;
-  color: #fff;
-}
-
-.gf-script:hover,
-.dm-script:hover {
-  opacity: 0.8;
-}
-
-    </style>
-</head>
-<body>
-    <div class="wrapper">
-        <div class="form-container">
-            <h1>Web client for Golang painter</h1>
-            <form>
-                <div class="form-group">
-                    <label for="textarea">Enter commands here:</label>
-                    <textarea class="form-control" id="textarea" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-outline-primary btn-block">Send HTTP request</button>
-            </form>
-
-            <h2><span>OR</span></h2>
-
-            <div class="d-flex justify-content-around">
-                <button type="button" class="btn btn-outline-success gf-script">Green frame script</button>
-                <button type="button" class="btn btn-outline-success dm-script">Diagon move script</button>
-            </div>              
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painter Controller</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="main-container">
+      <h1>Painter Controller</h1>
+      <form class="form">
+        <label for="textarea">Enter commands:</label>
+        <label class="hint" for="textarea">Example: green, update</label>
+        <div class="form-group">
+          <textarea class="form-control" id="textarea" rows="3"></textarea>
         </div>
+        <button type="submit" class="gray btn-block">Send</button>
+      </form>
+      <div class="button-container">
+        <button class="green gf-script">Green Frame</button>
+        <button class="yellow dm-script">
+          <span>Diagonal Move</span>
+        </button>
+      </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script type="module" src="./processing-functions.js"></script>
     <script type="module" src="./request-api.js"></script>
     <script type="module" src="./services.js"></script>
     <script type="module" src="./script.js"></script>
-</body>
+  </body>
 </html>
