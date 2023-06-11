@@ -1,4 +1,4 @@
-package test
+package lang
 
 import (
 	"image/color"
@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/AidXylelele/go_lab_3/painter"
-	"github.com/AidXylelele/go_lab_3/painter/lang"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -44,10 +43,9 @@ func TestParseStruct(t *testing.T) {
 		},
 	}
 
-
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			parser := &lang.Parser{}
+			parser := &Parser{}
 			ops, err := parser.Parse(strings.NewReader(tc.command))
 			if tc.op == nil {
 				assert.Error(t, err)
@@ -83,7 +81,7 @@ func TestParseFunc(t *testing.T) {
 		},
 	}
 
-	parser := &lang.Parser{}
+	parser := &Parser{}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
